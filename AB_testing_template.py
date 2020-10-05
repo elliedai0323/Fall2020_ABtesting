@@ -7,11 +7,15 @@ Much of the code has been provided, but several lines or functions require compl
 and associated comments/hints can be found by searching for the string "#####".
 '''
 
+%pip install pandas
+%pip install numpy
+%pip install math
+
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
 import datetime
-
+import math
 
 pd.options.display.max_columns = 10     # sets viewing configuration for easier readability in the console
 
@@ -22,17 +26,17 @@ def calc_proportion(array_TF):
 
 
 def calc_zscore(phat, p, n_f):
-    z_score_f = None    ##### Replace None with formula
+    z_score_f = (phat-p)/(math.sqrt((p*(1-p)/n)))    ##### Replace None with formula
     return z_score_f
 
 
 def get_z_crit_value(alpha_f, num_sides_f):
-    z_crit_value_f = None   ##### Replace None with formula; hint: use norm.ppf package
+    z_crit_value_f = norm.ppf(1-alpha_f/num_sides_f)   ##### Replace None with formula; hint: use norm.ppf package
     return z_crit_value_f
 
 
 def get_p_value(zscore_f, num_sides_f):
-    p_value_f = None   ##### Replace None with formula; hint: use norm.cdf package
+    p_value_f = norm.cdf(zscore_f)*num_sides_f  ##### Replace None with formula; hint: use norm.cdf package
     return p_value_f
 
 
@@ -43,7 +47,7 @@ def reject_null(variantA_outcomes_f, variantB_outcomes_f, alpha_f, num_sides_f):
     z_score = calc_zscore(p_hat_f, p_f, n_f)
     p_value = get_p_value(z_score, num_sides_f)
     z_crit = get_z_crit_value(alpha_f, num_sides_f)
-    reject_null_TF_f = None     ##### Replace None with formula. This should result in a boolean variable (True or False). You can check the variable type in the console with the command: "type(reject_null_TF_f)"
+    reject_null_TF_f = (z_score >= z_crit)     ##### Replace None with formula. This should result in a boolean variable (True or False). You can check the variable type in the console with the command: "type(reject_null_TF_f)"
     return reject_null_TF_f, z_score, p_value
 
 
@@ -52,7 +56,7 @@ def calc_optimal_sample_size(p0_f, mde_f, alpha_f, power_f):
     t_beta = abs(norm.ppf(1-power_f))
     p1_f = p0_f + mde_f
     p_avg = (p0_f + (p0_f + mde_f))/2
-    sample_size = None  ##### Replace None with formula
+    sample_size = (((t_alpha2*math.sqrt(2*p_avg*(1-p_avg)))+(t_beta*math.sqrt(p0_f*(1-p0_f)+p1_f*(1-p1_f))))**2)*(1/(power_f))  ##### Replace None with formula
     return sample_size
 
 
